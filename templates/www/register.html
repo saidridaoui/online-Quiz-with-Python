@@ -1,0 +1,134 @@
+{% extends 'www/header.html' %}
+{% load staticfiles %}	
+
+{% block title %}
+REGISTER
+{% endblock %}
+
+{% block bodystyle %}
+background: url({% static '/img/bg3.jpg' %}) no-repeat fixed; background-size: 100%;
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+
+</style>
+{% endblock %}
+
+{% block body %}
+
+	<!-- Section: intro -->
+    <section id="intro" class="intro" style="background: rgba(8, 111, 148, 0.5);">
+	
+		<div class="slogan">
+			<h2>Commencer des quiz en ligne</h2>
+			<h4>Des QUIZ 100% en-ligne, accessible à tous.</h4>
+			<h4>Nos QUIZ sont ouverts sur tous les supports.</h4>
+		</div>
+		<div class="page-scroll">
+			<a href="#register" class="btn btn-circle">
+				<i class="fa fa-angle-double-down animated"></i>
+			</a>
+		</div>
+    </section>
+	<!-- /Section: intro -->
+
+	<!-- Section: register -->
+    <section id="register" class="home-section text-center bg-white">
+		
+		<div class="heading-about">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.2s">
+					<div class="section-heading">
+					<h2>INSCRIPTION</h2>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+		<div class="row">
+			<div class="col-lg-2 col-lg-offset-5">
+				<hr class="marginbot-50">
+			</div>
+		</div>
+        <div class="row">
+		{% if error_message %}
+		<div class="row wow bounceInRight" data-wow-delay="0.2s">
+			<div class="col-sm-2"></div>
+			<div class="col-sm-8">
+				<div class="alert alert-danger fade in">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Opération échouée !</strong> {{ error_message }}
+				</div>
+			</div>
+		</div>
+		{% endif %}
+		{% if success %}
+		<div class="row wow bounceInRight" data-wow-delay="0.2s">
+			<div class="col-sm-2"></div>
+			<div class="col-sm-8">
+				<div class="alert alert-success fade in">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Opération réuissie !</strong> {{ success }}, vos information sont ajoutée a la base de données, maintenant il faut que vous attendez l'accept par l'admin.
+				</div>
+			</div>
+		</div>
+		{% endif %}
+
+		<form id="contact-form" class="form-group form-light mt-20" role="form" method="post" action="{% url 'www:register' %}#register">
+		{% csrf_token %}
+			<div class="form-group wow bounceInRight" data-wow-delay="0.2s">
+				<label for="username">Nom d'utilisateur <font color="darkred">*</font></label>
+				<input type="text" name="username" id="username" class="form-control" placeholder="Your username" maxlength="25" required="">
+			</div>
+			<div class="row">
+				<div class="col-md-6 wow bounceInLeft" data-wow-delay="0.2s">
+					<div class="form-group">
+						<label for="password">Mot de passe <font color="darkred">*</font></label>
+						<input type="password" name="password" id="password" class="form-control" placeholder="Your password" maxlength="16" required="">
+					</div>
+				</div>
+				<div class="col-md-6 wow bounceInRight" data-wow-delay="0.2s">
+					<div class="form-group">
+						<label for="cpassword">Confirmer le mot de passe <font color="darkred">*</font></label>
+						<input type="password" name="confirm_password" id="cpassword" class="form-control" placeholder="Confirm your password" maxlength="16" required="">
+					</div>
+				</div>
+			</div>
+			<div class="form-group wow bounceInLeft" data-wow-delay="0.2s">
+				<label for="email">Email <font color="darkred">*</font></label>
+				<input type="email" name="email" id="email" class="form-control" placeholder="Email address" maxlength="500" required="">
+			</div>
+			<div class="row">
+				<div class="col-md-6 wow bounceInLeft" data-wow-delay="0.2s">
+					<div class="form-group">
+						<label for="type">Type <font color="darkred">*</font></label>
+						<select name="type" id="type" class="form-control" required="">
+							<option value="user">Etudiant</option>
+							<option value="professor">Professeur</option>
+							<option value="admin">Admin</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-6 wow bounceInRight" data-wow-delay="0.2s">
+					<div class="form-group">
+						<label for="cin">C.I.N <font color="darkred">*</font></label>
+						<input type="text" name="cin" id="cin" class="form-control" placeholder="Your C.I.N" maxlength="10" required="">
+					</div>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-two">s'inscrire</button><p><br/></p>
+		</form>
+            
+        </div>		
+		</div>
+	</section>
+	<!-- /Section: register -->
+
+{% endblock %}

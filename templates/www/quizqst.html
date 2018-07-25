@@ -1,0 +1,185 @@
+{% extends 'www/header.html' %}
+{% load staticfiles %}	
+
+{% block title %}
+START QUIZ 
+{% endblock %}
+
+{% block bodystyle %}
+background: url({% static '/img/bg9.jpg' %}) no-repeat fixed; background-size: 100%;
+{% endblock %}
+
+{% block quiz %}
+active
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/style_1.css' %}">
+<style type="text/css">
+	input[type=radio] {
+		cursor: pointer;
+	}
+	label {
+		cursor: pointer;
+	}
+	button.start {
+		position: relative;
+		display: block;
+		overflow: hidden;
+		left: 50%;
+		margin-bottom: 20px;
+		width: 264px;
+		padding: 17px 55px;
+		background: transparent; outline: none;
+		border: 2px solid #111;
+		transform:translateX(-50%); 
+	}
+	button.start:hover{
+		cursor: pointer
+	}
+	button.start:hover:before{
+		opacity: 1; 
+		transform: translate(0,0);
+	}
+	button.start:before{
+		content: attr(data-hover);
+		position: absolute;
+		top: 1.22em; 
+		left: 0;
+		width: 100%;
+		text-transform: uppercase;
+		letter-spacing: 3px;
+		font-weight: 800;
+		font-size: 1em;
+		opacity: 0;
+		transform: translate(-100%,0);
+		-moz-transition: all 0.32s ease-in-out;
+		-webkit-transition: all 0.32s ease-in-out;
+		transition: all 0.32s ease-in-out;
+	}
+	button.start:hover div{
+		opacity: 0; 
+		transform: translate(100%,0);
+	}
+	button.start div{
+		text-transform: uppercase;
+		letter-spacing: 3px;
+		font-weight: 800;
+		font-size: 1em;
+		-moz-transition: all 0.32s ease-in-out;
+		-webkit-transition: all 0.32s ease-in-out;
+		transition: all 0.32s ease-in-out;
+	}
+
+	a:hover{
+		text-decoration: none !important;
+	}
+
+	.mybtn {
+		float: right;
+		background-color: #2aa1c0;
+		color: white;
+	}
+	.mybtn:hover{
+		background-color: #0e647d;
+		color: white;
+	}
+</style>
+{% endblock %}
+
+{% block body %}
+
+
+	<!-- Section: intro -->
+    <section id="intro" class="intro" style="background: rgba(8, 111, 148, 0.5);">
+		<div class="slogan">
+			<h2>Commencer des quiz en ligne</h2>
+			<h4>Des QUIZ 100% en-ligne, accessible à tous.</h4>
+			<h4>Nos QUIZ sont ouverts sur tous les supports.</h4>
+		</div>
+		<div class="page-scroll">
+			<a href="#quiz" class="btn btn-circle">
+				<i class="fa fa-angle-double-down animated"></i>
+			</a>
+		</div>
+    </section>
+	<!-- /Section: intro -->
+
+	<!-- Section: quiz -->
+    <section id="quiz" class="home-section bg-white">
+		<div class="heading-about text-center">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.2s">
+					<div class="section-heading">
+					<h2>Quiz - {{ quiz.quiz_subject }}</h2>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+
+		<div class="row">
+			<div class="col-lg-2 col-lg-offset-5">
+				<hr class="marginbot-50">
+			</div>
+		</div>
+        <div class="row col-lg-offset-2" style="width: 60%;">
+
+<!-- <div class="progress fade in">
+  <div class="progress-bar fade in" role="progressbar" aria-valuenow="{{ process_pct }}"
+  aria-valuemin="0" aria-valuemax="100" style="width: {{ process_pct }}%">
+    {{ process_pct }}%
+  </div>
+</div> -->
+<br>
+
+{% if question %}
+{% if true_choice > 1 %}
+<form action="{% url 'www:checkbox' quiz.id question.id %}#quiz" method="post" class="form-group" role="form">
+{% else %}
+<form action="{% url 'www:check' quiz.id question.id %}#quiz" method="post" class="form-group" role="form">
+{% endif %}
+{% csrf_token %}
+<div class="row">
+	<div class="col-sm-12">
+		<h4>{{ question.question_text }}</h4>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-offset-3 col-lg-9">
+	{% for choice in question.choice_set.all %}
+		{% if true_choice > 1 %}
+			<label for="ch{{ choice.id }}" class="control control--checkbox checkbox">
+				<input type="checkbox" name="choice[]" id="ch{{ choice.id }}" value="{{ choice.id }}"> {{ choice.choice_text }}
+				<div class="control__indicator"></div>
+			</label>
+		{% else %}
+			<label for="ch{{ choice.id }}" class="control control--radio radio">
+				<input type="radio" name="choice" id="ch{{ choice.id }}" value="{{ choice.id }}" required=""> {{ choice.choice_text }}
+				<div class="control__indicator"></div>
+			</label>
+		{% endif %}
+	{% endfor %}
+	</div>
+</div><br>
+<div class="row">
+	<button type="submit" name="submit" class="btn mybtn">next &raquo;</button>
+</div>
+</form>
+{% else %}
+<div class="row text-center">
+	<br><h1>Quiz vide ...</h1><br>
+</div>
+{% endif %}
+
+		</div>
+	</section>
+	<!-- /Section: quiz -->
+
+{% endblock %}

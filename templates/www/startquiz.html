@@ -1,0 +1,170 @@
+{% extends 'www/header.html' %}
+{% load staticfiles %}	
+
+{% block title %}
+ABOUT QUIZ 
+{% endblock %}
+
+{% block bodystyle %}
+background: url({% static '/img/bg9.jpg' %}) no-repeat fixed; background-size: 100%;
+{% endblock %}
+
+{% block quiz %}
+active
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+	input[type=radio] {
+		cursor: pointer;
+	}
+	label {
+		cursor: pointer;
+	}
+	button.start {
+		position: relative;
+		display: block;
+		overflow: hidden;
+		left: 50%;
+		margin-bottom: 20px;
+		width: 254px;
+		padding: 17px 55px;
+		background: transparent; outline: none;
+		border: 2px solid #111;
+		transform:translateX(-50%); 
+	}
+	button.start:hover{
+		cursor: pointer
+	}
+	button.start:hover:before{
+		opacity: 1; 
+		transform: translate(0,0);
+	}
+	button.start:before{
+		content: attr(data-hover);
+		position: absolute;
+		top: 1.22em; 
+		left: 0;
+		width: 100%;
+		text-transform: uppercase;
+		letter-spacing: 3px;
+		font-weight: 800;
+		font-size: 1em;
+		opacity: 0;
+		transform: translate(-100%,0);
+		-moz-transition: all 0.32s ease-in-out;
+		-webkit-transition: all 0.32s ease-in-out;
+		transition: all 0.32s ease-in-out;
+	}
+	button.start:hover div{
+		opacity: 0; 
+		transform: translate(100%,0);
+	}
+	button.start div{
+		text-transform: uppercase;
+		letter-spacing: 3px;
+		font-weight: 800;
+		font-size: 1em;
+		-moz-transition: all 0.32s ease-in-out;
+		-webkit-transition: all 0.32s ease-in-out;
+		transition: all 0.32s ease-in-out;
+	}
+
+	a:hover{
+		text-decoration: none !important;
+	}
+</style>
+{% endblock %}
+
+{% block body %}
+
+
+	<!-- Section: intro -->
+    <section id="intro" class="intro" style="background: rgba(8, 111, 148, 0.5);">
+		<div class="slogan">
+			<h2>Commencer des quiz en ligne</h2>
+			<h4>Des QUIZ 100% en-ligne, accessible à tous.</h4>
+			<h4>Nos QUIZ sont ouverts sur tous les supports.</h4>
+		</div>
+		<div class="page-scroll">
+			<a href="#quiz" class="btn btn-circle">
+				<i class="fa fa-angle-double-down animated"></i>
+			</a>
+		</div>
+    </section>
+	<!-- /Section: intro -->
+
+	<!-- Section: quiz -->
+    <section id="quiz" class="home-section bg-white">
+		<div class="heading-about text-center">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.2s">
+					<div class="section-heading">
+					<h2>Quiz {{ quiz.id }} :</h2>
+					<h4>
+						{% if iscomplete %}
+							<span class="glyphicon glyphicon-ok-sign" style="color: green;"></span> complet
+						{% else %}
+							<span class="glyphicon glyphicon-remove-sign" style="color: red;"></span> non complet
+						{% endif %}
+					</h4>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+
+		<div class="row">
+			<div class="col-lg-2 col-lg-offset-5">
+				<hr class="marginbot-50">
+			</div>
+		</div>
+		<div class="row wow bounceInLeft" data-wow-delay="0.4s">
+			<a href="{% url 'www:quiz' %}#quiz" class="btn btn-info" style="border-radius: 20px !important;"><span class="glyphicon glyphicon-circle-arrow-left"></span> passer un autre quiz</a>
+		</div><br>
+        <div class="row">
+
+			<h2 class="wow bounceInLeft" data-wow-delay="0.25s">Quiz - {{ quiz.quiz_subject }} :</h2>
+			<p class="wow bounceInUp" data-wow-delay="0.25s">&raquo; Créer par : <b style="text-transform: capitalize;">{{ quiz.quiz_prof.username }}</b></p>
+			<p class="wow bounceInUp" data-wow-delay="0.3s">Ce quiz est à propos de: {{ quiz.quiz_subject }}, il peut vous aider a augmenter votre niveau et avoir un bon bagage en {{ quiz.quiz_subject }} ...</p>
+			<p class="wow bounceInUp" data-wow-delay="0.35s">Total des questions : {{ quiz.question_set.count }}</p>
+			<br><br>
+			{% if question %}
+				<a href="{% url 'www:quizqst' quiz.id question.id %}#quiz" style="text-decoration: none;">
+			{% else %}
+				<a href="#" data-toggle="modal" data-target="#noncomplete">
+			{% endif %}
+				<button type="button" class="start wow bounceInRight" data-wow-delay="0.25s" data-hover="start" data-toggle="modal" data-target="#notcomplete"><div>{{ quiz.quiz_subject }}</div></button>
+				</a>
+		</div>
+	</section>
+	<!-- /Section: quiz -->
+
+{% if not question %}
+<!-- Modal -->
+<div class="modal fade" id="notcomplete" role="dialog" style="z-index: 1050;">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4>Quiz non complet</h4>
+			</div>
+			<div class="modal-body row" style="padding-left: 60px; padding-right: 60px;">
+			<p>Ce quiz n'est pas complet</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}
+<!-- /Modal -->
+
+{% endblock %}

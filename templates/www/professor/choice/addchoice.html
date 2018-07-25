@@ -1,0 +1,130 @@
+{% extends 'www/header.html' %}
+{% load staticfiles %}	
+
+{% block title %}
+ADD
+{% endblock %}
+
+{% block bodystyle %}
+background: url({% static '/img/bg2.jpg' %}) no-repeat fixed; background-size: 100%;
+{% endblock %}
+
+{% block body %}
+
+
+	<!-- Section: intro -->
+    <section id="intro" class="intro" style="background: rgba(8, 111, 148, 0.5);">
+	
+		<div class="slogan">
+			<h2>Ajouter un choix</h2>
+			<h4>Quiz: {{ question.quiz.quiz_subject }}</h4>
+			<h4>Question: {{ question.question_text }}</h4>
+			<h4>Ici vous pouvez ajouter un choix.</h4>
+		</div>
+		
+		<div class="page-scroll">
+			<a href="#add" class="btn btn-circle">
+				<i class="fa fa-angle-double-down animated"></i>
+			</a>
+		</div>
+    </section>
+	<!-- /Section: intro -->
+
+	<!-- Section: add -->
+    <section id="add" class="home-section bg-white">
+		<div class="heading-about text-center">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.4s">
+					<div class="section-heading">
+					<h2>Choix</h2>
+					<h4>{{ question.quiz.quiz_subject }} -- {{ question.question_text }}</h4><br>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+
+		<div class="row wow bounceInUp" data-wow-delay="0.2s">
+			<div class="col-lg-2 col-lg-offset-5">
+				<hr class="marginbot-50">
+			</div>
+		</div>
+		{% if error_message %}
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="alert alert-danger fade in">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Opération échouée !</strong> {{ error_message }}
+					</div>
+				</div>
+			</div><br>
+		{% elif success %}
+			<div class="row wow bounceInUp" data-wow-delay="0.2s">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="alert alert-success fade in">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Opération réussie !</strong> pour voire tout les choix <a href="{% url 'www:choice' question.id %}#choice">cliquez ici</a>.
+					</div>
+				</div>
+			</div>
+		{% endif %}
+        <div class="row">
+        <div class="col-lg-12">
+            <div class="boxed-grey">
+			<!-- Edited -->
+			<form method="post"  id="contact-form" class="form-group" action="{% url 'www:addchoice_confirm' question.id %}#add">
+			{% csrf_token %}
+			<div class="row wow bounceInRight" data-wow-delay="0.2s">
+				<div class="col-sm-3">
+					<label for="qst">Question :</label><br>
+				</div>
+				<div class="col-sm-9">
+					<select name="question" id="qst" class="form-control" required="">
+					<option value="{{ question.id }}">{{ question.question_text }}</option>
+				</select>
+				</div>
+			</div><br>
+			<div class="row wow bounceInLeft" data-wow-delay="0.2s">
+				<div class="col-sm-3">
+					<label for="choice">Choix :</label><br>
+				</div>
+				<div class="col-sm-9">
+					<input type="text" name="choice" id="choice" class="form-control" placeholder="choice" maxlength="100" required="" autofocus>
+				</div>
+			</div><br>
+			<div class="row wow bounceInRight" data-wow-delay="0.2s">
+				<div class="col-sm-3">
+					<label>Juste ou Fausse :</label><br>
+				</div>
+				<div class="col-sm-9">
+					<label class="radio-inline" for="True"><input type="radio" name="state" id="True" value="True" required=""> Juste</label>
+					<label class="radio-inline" for="False"><input type="radio" name="state" id="False" value="False" required=""> Faux</label>
+				</div>
+			</div><br>
+			<div class="row wow bounceInLeft" data-wow-delay="0.2s">
+				<div class="col-sm-12" align="center">
+					<a href="{% url 'www:choice' question.id %}#choice">
+						<button type="button" name="annuler" class="btn btn-info">annuler</button>
+					</a>
+					<button type="submit" name="submit" class="btn btn-primary">ajouter</button>
+				</div>
+			</div>
+				
+			</form>
+			</div>
+		</div>
+        </div>		
+		</div>
+	</section>
+	<!-- /Section: add -->
+
+
+{% endblock %}

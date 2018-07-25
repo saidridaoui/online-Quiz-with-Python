@@ -1,0 +1,117 @@
+{% extends 'www/header.html' %}
+{% load staticfiles %}	
+
+{% block title %}
+LOGIN
+{% endblock %}
+
+{% block bodystyle %}
+background: url({% static '/img/bg3.jpg' %}) no-repeat fixed; background-size: 100%;
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+
+</style>
+{% endblock %}
+
+{% block body %}
+
+	<!-- Section: intro -->
+    <section id="intro" class="intro" style="background: rgba(8, 111, 148, 0.5);">
+	
+		<div class="slogan">
+			<h2>Commencer des quiz en ligne</h2>
+			<h4>Des QUIZ 100% en-ligne, accessible à tous.</h4>
+			<h4>Nos QUIZ sont ouverts sur tous les supports.</h4>
+		</div>
+		<div class="page-scroll">
+			<a href="#login" class="btn btn-circle">
+				<i class="fa fa-angle-double-down animated"></i>
+			</a>
+		</div>
+    </section>
+	<!-- /Section: intro -->
+
+	<!-- Section: login -->
+    <section id="login" class="home-section text-center bg-white">
+		
+		<div class="heading-about">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.4s">
+					<div class="section-heading">
+					<h2>LOGIN</h2>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+		<div class="row">
+			<div class="col-lg-2 col-lg-offset-5">
+				<hr class="marginbot-50">
+			</div>
+		</div>
+        <div class="row">
+		{% if error_message %}
+		<div class="row">
+			<div class="col-sm-2"></div>
+			<div class="col-sm-8">
+				<div class="alert alert-danger fade in">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Accés non disponible !</strong> {{ error_message }}
+				</div>
+			</div>
+		</div>
+		{% endif %}
+
+		<form id="contact-form" class="form-group form-light mt-20" role="form" method="post" action="{% url 'www:login' %}#login">
+		{% csrf_token %}
+			<div class="form-group row">
+			<div class="col-lg-offset-2 col-sm-2">
+				<label for="username">Nom d'utilisateur <font color="darkred">*</font></label>
+			</div>
+			<div class="col-sm-5">
+			{% if auth_user %}
+				<input type="text" name="username" id="username" class="form-control" placeholder="Your username" maxlength="25" required="" value="{{ auth_user }}" autofocus>
+			{% else %}
+				<input type="text" name="username" id="username" class="form-control" placeholder="Your username" maxlength="25" required="" autofocus>
+			{% endif %}
+			</div>
+			</div>
+			<div class="form-group row">
+			<div class="col-lg-offset-2 col-sm-2">
+				<label for="password">Mot de passe <font color="darkred">*</font></label>
+			</div>
+			<div class="col-sm-5">
+				<input type="password" name="password" id="password" class="form-control" placeholder="Your password" maxlength="16" required="">
+			</div>
+			</div>
+			<div class="form-group row">
+			<div class="col-lg-offset-2 col-sm-2">
+				<label for="type">Type <font color="darkred">*</font></label>
+			</div>
+			<div class="col-sm-3">
+				<select name="type" id="type" class="form-control" required="">
+					<option value="user">Etudiant</option>
+					<option value="professor">Professeur</option>
+					<option value="admin">Admin</option>
+				</select>
+			</div>
+			<div class="col-sm-2">
+				<button type="submit" class="btn btn-two">se connecter</button><br/>
+			</div>
+			</div>
+		</form>
+            
+        </div>		
+		</div>
+	</section>
+	<!-- /Section: login -->
+
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends 'www/header.html' %}
+{% load staticfiles %}
+
+{% block title %}
+EDIT
+{% endblock %}
+
+{% block bodystyle %}
+background: url({% static '/img/bg2.jpg' %}) no-repeat fixed; background-size: 100%;
+{% endblock %}
+
+{% block body %}
+
+
+	<!-- Section: intro -->
+    <section id="intro" class="intro" style="background: rgba(8, 111, 148, 0.5);">
+	
+		<div class="slogan">
+			<h2>Modifier une question</h2>
+			<h4>Quiz: {{ quiz.quiz_subject }}</h4>
+			<h4>Ici vous pouvez modifier une question.</h4>
+		</div>
+		
+		<div class="page-scroll">
+			<a href="#edit" class="btn btn-circle">
+				<i class="fa fa-angle-double-down animated"></i>
+			</a>
+		</div>
+    </section>
+	<!-- /Section: intro -->
+
+	<!-- Section: edit -->
+    <section id="edit" class="home-section bg-white">
+		<div class="heading-about text-center">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.4s">
+					<div class="section-heading">
+					<h2>Question</h2>
+					<h4>- {{ quiz.quiz_subject }} -</h4><br>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+
+		<div class="row wow bounceInUp" data-wow-delay="0.2s">
+			<div class="col-lg-2 col-lg-offset-5">
+				<hr class="marginbot-50">
+			</div>
+		</div>
+
+		{% if error_message %}
+			<div class="row wow bounceInUp" data-wow-delay="0.2s">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="alert alert-danger fade in">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Opération échouée !</strong> {{ error_message }}
+					</div>
+				</div>
+			</div>
+		{% elif success %}
+			<div class="row wow bounceInUp" data-wow-delay="0.2s">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="alert alert-success fade in">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Opération réussie !</strong> {{ success }}.
+					</div>
+				</div>
+			</div>
+		{% endif %}
+
+        <div class="row">
+        <div class="col-lg-12">
+            <div class="boxed-grey">
+			<!-- Edited -->
+			<form method="post"  id="contact-form" class="form-group" action="{% url 'www:editqst_confirm' quiz.id qst.id %}#question">
+			{% csrf_token %}
+			<div class="row wow bounceInRight" data-wow-delay="0.2s">
+				<div class="col-sm-3">
+					<label for="quiz">Quiz :</label><br>
+				</div>
+				<div class="col-sm-9">
+					<select name="quiz" id="quiz" class="form-control" required="">
+						{% for q in user.quiz_set.all %}
+						{% if q.id == quiz.id %}
+							<option value="{{ q.id }}" selected="">{{ q.quiz_subject }}</option>
+						{% else %}
+							<option value="{{ q.id }}">{{ q.quiz_subject }}</option>
+						{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+			</div><br>
+			<div class="row wow bounceInLeft" data-wow-delay="0.2s">
+				<div class="col-sm-3">
+					<label for="question">Question :</label><br>
+				</div>
+				<div class="col-sm-9">
+					<input type="text" name="question" id="question" class="form-control" placeholder="question" value="{{ qst.question_text }}" maxlength="100" required="">
+				</div>
+			</div><br>
+			<div class="row wow bounceInRight" data-wow-delay="0.2s">
+				<div class="col-sm-12" align="center">
+					<a href="{% url 'www:question' quiz.id %}#question">
+						<button type="button" name="annuler" class="btn btn-info">annuler</button>
+					</a>
+					<button type="submit" name="submit" class="btn btn-primary">modifier</button>
+				</div>
+			</div>
+				
+			</form>
+			</div>
+		</div>
+        </div>		
+		</div>
+	</section>
+	<!-- /Section: edit -->
+
+
+{% endblock %}

@@ -1,0 +1,293 @@
+{% extends 'www/header.html' %}
+{% load staticfiles %}
+
+{% block title %}
+WELCOME
+{% endblock %}
+
+{% block head %}
+<!-- <script src="{% static 'js/search_script.js' %}"></script> -->
+<style type="text/css">
+	.dropdown ul li a:hover{
+		background: transparent !important;
+	}
+
+</style>
+{% endblock %}	
+
+{% block bodystyle %}
+background: url({% static '/img/bg8.jpg' %}) no-repeat fixed;
+{% endblock %}
+
+{% block adminhome %}
+active
+{% endblock %}
+
+{% block body %}
+
+
+	<!-- Section: intro -->
+    <section id="intro" class="intro" style="background: rgba(8, 111, 148, 0.5);">
+	
+		<div class="slogan">
+			<h2>Escpace Administrateur</h2>
+			<h4>Ici vous pouvez ajouter, modifier et supprimer les comptes des acteurs.</h4>
+		</div>
+
+		{% if error_message %}
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="alert alert-danger fade in">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Opération échouée !</strong> {{ error_message }}
+					</div>
+				</div>
+			</div>
+		{% elif success %}
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="alert alert-success fade in">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Opération réuissie !</strong> {{ success }}.
+					</div>
+				</div>
+			</div>
+		{% endif %}
+
+		<div class="page-scroll">
+			<a href="#admin" class="btn btn-circle">
+				<i class="fa fa-angle-double-down animated"></i>
+			</a>
+		</div>
+    </section>
+	<!-- /Section: intro -->
+
+	<!-- Section: admin -->
+    <section id="admin" class="home-section bg-white">
+		<div class="heading-about text-center">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.4s">
+					<div class="section-heading">
+					<h2>Administrateurs</h2>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+
+		<div class="row">
+			<div class="col-lg-2 col-lg-offset-5">
+				<hr class="marginbot-50">
+			</div>
+		</div><br>
+        <div class="row  wow bounceInUp" data-wow-delay="0.1s">
+
+			<!-- Admins -->
+			<table id="admintable" class="table table-hover">
+				<thead>
+					<tr id="none" class="wow bounceInUp" data-wow-delay="0.2s">
+						<th>#</th>
+						<th>Nom d'utilisateur</th>
+						<th>CIN</th>
+						<th>email</th>
+						<th>valide</th>
+						<th style="width: 270px;"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for usr in admins %}
+					<tr id="tr">
+						<td>{{ usr.id }}</td>
+						<td>{{ usr.username }}</td>
+						<td>{{ usr.cin }}</td>
+						<td>{{ usr.email }}</td>
+						<td>
+							{% if usr.is_valid %}
+							<span class="glyphicon glyphicon-ok-sign" style="color: green;"></span>
+							{% else %}
+							<span class="glyphicon glyphicon-remove-sign" style="color: red;"></span>
+							{% endif %}
+						</td>
+						<td><a href="{% url 'www:edit' 'admin' usr.id %}#edit">
+						<button class="btn btn-info">
+							<span class="glyphicon glyphicon-edit"></span> modifier
+						</button>
+						</a>
+						<a href="{% url 'www:delete' usr.id %}">
+						<button class="btn btn-danger">
+							<span class="glyphicon glyphicon-trash"></span> supprimer
+						</button>
+						</a></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+        </div>		
+		</div>
+	</section>
+	<!-- /Section: admin -->
+	
+
+	<!-- Section: professor -->
+    <section id="professor" class="home-section bg-gray">
+		
+		<div class="heading-about text-center">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.4s">
+					<div class="section-heading">
+					<h2>Professeurs</h2>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+		<div class="row">
+			<div class="col-lg-2 col-lg-offset-5">
+				<hr class="marginbot-50">
+			</div>
+		</div><br>
+        <div class="row wow bounceInUp" data-wow-delay="0.1s">
+
+			<!-- Professors -->
+			<table id="proftable" class="table table-hover">
+				<thead>
+					<tr id="none" class="wow bounceInUp" data-wow-delay="0.2s">
+						<th>#</th>
+						<th>Nom d'utilisateur</th>
+						<th>CIN</th>
+						<th>email</th>
+						<th>valide</th>
+						<th style="width: 270px;"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for usr in profs %}
+					<tr id="tr">
+						<td>{{ usr.id }}</td>
+						<td>{{ usr.username }}</td>
+						<td>{{ usr.cin }}</td>
+						<td>{{ usr.email }}</td>
+						<td>
+							{% if usr.is_valid %}
+							<span class="glyphicon glyphicon-ok-sign" style="color: green;"></span>
+							{% else %}
+							<span class="glyphicon glyphicon-remove-sign" style="color: red;"></span>
+							{% endif %}
+						</td>
+						<td><a href="{% url 'www:edit' 'professor' usr.id %}#edit">
+						<button class="btn btn-info">
+							<span class="glyphicon glyphicon-edit"></span> modifier
+						</button>
+						</a>
+						<a href="{% url 'www:delete' usr.id %}">
+						<button class="btn btn-danger">
+							<span class="glyphicon glyphicon-trash"></span> supprimer
+						</button>
+						</a></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+        </div>		
+		</div>
+	</section>
+	<!-- /Section: professor -->
+
+	<!-- Section: user -->
+    <section id="user" class="home-section bg-white">
+		<div class="heading-about text-center">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.4s">
+					<div class="section-heading">
+					<h2>Etudiants</h2>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+
+		<div class="row">
+			<div class="col-lg-2 col-lg-offset-5">
+				<hr class="marginbot-50">
+			</div>
+		</div><br>
+        <div class="row wow bounceInUp" data-wow-delay="0.1s">
+
+			<!-- User -->
+			<table id="usertable" class="table table-hover" align="left">
+				<thead>
+					<tr id="none" class="wow bounceInUp" data-wow-delay="0.2s">
+						<th>#</th>
+						<th>Nom d'utilisateur</th>
+						<th>CIN</th>
+						<th>email</th>
+						<th>valide</th>
+						<th style="width: 270px;"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for usr in users %}
+					<tr id="tr">
+						<td>{{ usr.id }}</td>
+						<td>{{ usr.username }}</td>
+						<td>{{ usr.cin }}</td>
+						<td>{{ usr.email }}</td>
+						<td>
+							{% if usr.is_valid %}
+							<span class="glyphicon glyphicon-ok-sign" style="color: green;"></span>
+							{% else %}
+							<span class="glyphicon glyphicon-remove-sign" style="color: red;"></span>
+							{% endif %}
+						</td>
+						<td><a href="{% url 'www:edit' 'user' usr.id %}#edit">
+						<button class="btn btn-info">
+							<span class="glyphicon glyphicon-edit"></span> modifier
+						</button>
+						</a>
+						<a href="{% url 'www:delete' usr.id %}">
+						<button class="btn btn-danger">
+							<span class="glyphicon glyphicon-trash"></span> supprimer
+						</button>
+						</a></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+        </div>		
+		</div>
+	</section>
+	<!-- /Section: user -->
+
+	<script src="{% static 'js/jquery.js' %}"></script>
+	<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+	<script src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
+	<script>
+		$('#admintable').dataTable();
+		$('#proftable').dataTable();
+		$('#usertable').dataTable();
+	</script>
+
+{% endblock %}

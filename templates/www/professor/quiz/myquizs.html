@@ -1,0 +1,133 @@
+{% extends 'www/header.html' %}
+{% load staticfiles %}	
+
+{% block title %}
+MY QUIZ
+{% endblock %}
+
+{% block bodystyle %}
+background: url({% static '/img/bg2.jpg' %}) no-repeat fixed; background-size: 100%;
+{% endblock %}
+
+{% block myquiz %}
+active
+{% endblock %}
+
+{% block body %}
+
+
+	<!-- Section: intro -->
+    <section id="intro" class="intro" style="background: rgba(8, 111, 148, 0.5);">
+	
+		<div class="slogan">
+			<h2>Mes Quiz</h2>
+			<h4>Vous pouvez créer, modifier et supprimmer des quiz aussi gérer les questions et leurs choix.</h4>
+		</div>
+
+		<div class="page-scroll">
+			<a href="#quiz" class="btn btn-circle">
+				<i class="fa fa-angle-double-down animated"></i>
+			</a>
+		</div>
+    </section>
+	<!-- /Section: intro -->
+
+	<!-- Section: quiz -->
+    <section id="quiz" class="home-section bg-gray">
+		
+		<div class="heading-about text-center">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.4s">
+					<div class="section-heading">
+					<h2>Mes Quiz</h2>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+		<div class="row">
+			<div class="col-lg-2 col-lg-offset-5">
+				<hr class="marginbot-50">
+			</div>
+		</div>
+		{% if error_message %}
+			<div class="row wow bounceInUp" data-wow-delay="0.2s">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="alert alert-danger fade in">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Opération échouée !</strong> {{ error_message }}
+					</div>
+				</div>
+			</div>
+		{% elif success %}
+			<div class="row wow bounceInUp" data-wow-delay="0.2s">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="alert alert-success fade in">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Opération réussie !</strong> {{ success }}.
+					</div>
+				</div>
+			</div>
+		{% endif %}
+        <div class="row wow bounceInDown" data-wow-delay="0.2s">
+        <table class="table table-hover" id="quiztable">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Sujet</th>
+					<th>Professeur</th>
+					<th>Nombre de questions</th>
+					<th style="width: 375px;"></th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for q in all_quizs %}
+
+					<tr>
+						<td>{{ q.id }}</td>
+						<td>{{ q.quiz_subject }}</td>
+						<td>{{ q.quiz_prof.username }}</td>
+						<td>{{ q.question_set.count }} <a href="{% url 'www:question' q.id %}#question">(consulter les questions)</a></td>
+						<td>
+							<a href="{% url 'www:startquiz' q.id %}#quiz">
+								<button class="btn btn-success">
+									<span class="glyphicon glyphicon-play"></span> tester
+								</button>
+							</a>
+							<a href="{% url 'www:editquiz' q.id %}#edit">
+								<button class="btn btn-info">
+									<span class="glyphicon glyphicon-edit"></span> modifier
+								</button>
+							</a>
+							<a href="{% url 'www:deletequiz' q.id %}#quiz">
+								<button class="btn btn-danger">
+									<span class="glyphicon glyphicon-trash"></span> supprimer
+								</button>
+							</a>
+						</td>
+					</tr>
+
+			{% endfor %}
+			</tbody>
+		</table>
+        </div>
+		</div>
+	</section>
+	<!-- /Section: quiz -->
+
+	<script src="{% static 'js/jquery.js' %}"></script>
+	<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+	<script src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
+	<script>
+		$('#quiztable').dataTable();
+	</script>
+
+{% endblock %}

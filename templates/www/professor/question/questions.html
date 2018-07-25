@@ -1,0 +1,134 @@
+{% extends 'www/header.html' %}
+{% load staticfiles %}	
+
+{% block title %}
+QUESTIONS
+{% endblock %}
+
+{% block bodystyle %}
+background: url({% static '/img/bg2.jpg' %}) no-repeat fixed; background-size: 100%;
+{% endblock %}
+
+{% block body %}
+
+
+	<!-- Section: intro -->
+    <section id="intro" class="intro" style="background: rgba(8, 111, 148, 0.5);">
+	
+		<div class="slogan">
+			<h2>Questions</h2>
+			<h4>Quiz: {{ quiz.quiz_subject }}</h4>
+		</div>
+
+		<div class="page-scroll">
+			<a href="#question" class="btn btn-circle">
+				<i class="fa fa-angle-double-down animated"></i>
+			</a>
+		</div>
+    </section>
+	<!-- /Section: intro -->
+
+	<!-- Section: question -->
+    <section id="question" class="home-section bg-gray">
+		
+		<div class="heading-about text-center">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.4s">
+					<div class="section-heading">
+					<h2>Questions</h2>
+					<h4>
+						- {{ quiz.quiz_subject }} -
+					{% if iscomplete %}
+						<span class="glyphicon glyphicon-ok-sign" style="color: green;"></span> complet
+					{% else %}
+						<span class="glyphicon glyphicon-remove-sign" style="color: red;"></span> non complet
+					{% endif %}
+					</h4><br>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+		<div class="row">
+			<div class="col-lg-2 col-lg-offset-5">
+				<hr class="marginbot-50">
+			</div>
+		</div>
+		{% if error_message %}
+			<div class="row wow bounceInUp" data-wow-delay="0.05s">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="alert alert-danger fade in">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Opération échouée !</strong> {{ error_message }}
+					</div>
+				</div>
+			</div>
+		{% elif success %}
+			<div class="row wow bounceInUp" data-wow-delay="0.05s">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="alert alert-success fade in">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Opération réussie !</strong> {{ success }}.
+					</div>
+				</div>
+			</div>
+		{% endif %}
+		<div class="row wow bounceInLeft" data-wow-delay="0.4s">
+		<a href="{% url 'www:myquizs' %}#quiz" class="btn btn-info" style="border-radius: 20px !important;"><span class="glyphicon glyphicon-circle-arrow-left"></span> mes quiz</a>
+			<a href="{% url 'www:addqst' quiz.id %}#add" class="btn btn-info" style="border-radius: 20px !important;"><span class="glyphicon glyphicon-plus"></span> ajouter une question</a>
+		</div><br>
+        <div class="row wow bounceInDown" data-wow-delay="0.01s">
+        <table class="table table-hover" id="qsttable">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Question</th>
+					<th>Nombre de choix</th>
+					<th style="width: 270px;"></th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for q in question %}
+
+					<tr>
+						<td>{{ q.id }}</td>
+						<td>{{ q.question_text }}</td>
+						<td>{{ q.choice_set.count }} <a href="{% url 'www:choice' q.id %}#choice">(consulter les choix)</a></td>
+						<td>
+							<a href="{% url 'www:editqst' quiz.id q.id %}#edit">
+								<button class="btn btn-info">
+									<span class="glyphicon glyphicon-edit"></span> modifier
+								</button>
+							</a>
+							<a href="{% url 'www:deleteqst' quiz.id q.id %}#question">
+								<button class="btn btn-danger">
+									<span class="glyphicon glyphicon-trash"></span> supprimer
+								</button>
+							</a>
+						</td>
+					</tr>
+
+			{% endfor %}
+			</tbody>
+		</table>
+        </div>
+		</div>
+	</section>
+	<!-- /Section: question -->
+
+	<script src="{% static 'js/jquery.js' %}"></script>
+	<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+	<script src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
+	<script>
+		$('#qsttable').dataTable();
+	</script>
+
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends 'www/header.html' %}
+{% load staticfiles %}
+
+{% block title %}
+EDIT
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+	.dropdown ul li a:hover{
+		background: transparent !important;
+	}
+
+</style>
+{% endblock %}	
+
+{% block bodystyle %}
+background: url({% static '/img/bg8.jpg' %}) no-repeat fixed;
+{% endblock %}
+
+{% block body %}
+
+
+	<!-- Section: intro -->
+    <section id="intro" class="intro" style="background: rgba(8, 111, 148, 0.5);">
+	
+		<div class="slogan">
+			<h2>Modifier un acteur</h2>
+			<h4>Vous pouvez modifier des acteurs (admin, professeur ou etudiant).</h4>
+		</div>
+		<div class="page-scroll">
+			<a href="#edit" class="btn btn-circle">
+				<i class="fa fa-angle-double-down animated"></i>
+			</a>
+		</div>
+    </section>
+	<!-- /Section: intro -->
+
+	<!-- Section: edit -->
+    <section id="edit" class="home-section bg-white">
+		<div class="heading-about text-center">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.4s">
+					<div class="section-heading">
+					<h2>{{ usr.username }}</h2>
+					<tt>
+					{{ usr.type_person }} - 
+					{% if usr.is_valid %}
+					Actif
+					{% else %}
+					Bloqué
+					{% endif %}
+					</tt><br>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+
+			<div class="row wow bounceInUp" data-wow-delay="0.2s">
+				<div class="col-lg-2 col-lg-offset-5">
+					<hr class="marginbot-50">
+				</div>
+			</div>
+
+        <div class="row">
+        <div class="col-lg-12">
+            <div class="boxed-grey">
+			<!-- Edited -->
+			<form method="post"  id="contact-form" class="form-group" action="{% url 'www:edit_user' usr.type_person usr.id %}">
+			{% csrf_token %}
+			<div class="row wow bounceInLeft" data-wow-delay="0.2s">
+				<div class="col-sm-3">
+					<label for="username">Nom d'utilisateur :</label><br>
+				</div>
+				<div class="col-sm-9">
+					<input type="text" name="username" id="username" class="form-control" maxlength="25" value="{{ usr.username }}" required="" autofocus="">
+				</div>
+			</div><br>
+			<div class="row wow bounceInRight" data-wow-delay="0.2s">
+				<div class="col-sm-3">
+					<label for="pass">Mot de passe :</label><br>
+				</div>
+				<div class="col-sm-5">
+					<input type="password" name="password" id="pass" class="form-control" maxlength="16" placeholder="password" >
+				</div>
+				<div class="col-sm-4">
+					<input type="password" name="confirm_password" id="cpass" class="form-control" maxlength="16" placeholder="confirm password" >
+				</div>
+			</div>
+			<div class="row wow bounceInRight" data-wow-delay="0.2s">
+				<div class="col-sm-3"></div>
+				<div class="col-sm-9">
+				<span class="help-block">si vous ne voulez pas changer le mot de passe laisser le champ vide.</span>
+				</div>
+			</div><br>
+			<div class="row wow bounceInLeft" data-wow-delay="0.2s">
+				<div class="col-sm-3">
+					<label for="email">Email :</label><br>
+				</div>
+				<div class="col-sm-9">
+				<div class="input-group">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span>
+					</span>
+					<input type="email" name="email" id="email" class="form-control" maxlength="100" value="{{ usr.email }}" required="">
+				</div>
+				</div>
+			</div><br>
+			<div class="row wow bounceInRight" data-wow-delay="0.2s">
+				<div class="col-sm-3">
+					<label for="cin">C.I.N :</label><br>
+				</div>
+				<div class="col-sm-9">
+					<input type="text" name="cin" id="cin" class="form-control" maxlength="10" maxlength="8" value="{{ usr.cin }}" required="">
+				</div>
+			</div><br>
+			<div class="row wow bounceInLeft" data-wow-delay="0.2s">
+				<div class="col-sm-3">
+					<label>Valide :</label><br>
+				</div>
+				<div class="col-sm-4">
+				{% if usr.is_valid %}
+					<label class="radio-inline" for="True"><input type="radio" name="valid" id="True" value="True" required="" checked=""> oui</label>
+					<label class="radio-inline" for="False"><input type="radio" name="valid" id="False" value="False" required=""> non</label>
+				{% else %}
+					<label class="radio-inline" for="True"><input type="radio" name="valid" id="True" value="True" required=""> oui</label>
+					<label class="radio-inline" for="False"><input type="radio" name="valid" id="False" value="False" required="" checked=""> non</label>
+				{% endif %}
+				</div>
+				<div class="col-sm-5" align="center">
+					<a href="{% url 'www:indexAdmin' %}">
+						<button type="button" name="annuler" class="btn btn-info">annuler</button>
+					</a>
+					<button type="submit" name="submit" class="btn btn-primary">modifier</button>
+				</div>
+			</div>
+				
+			</form>
+			</div>
+		</div>
+        </div>		
+		</div>
+	</section>
+	<!-- /Section: edit -->
+
+
+{% endblock %}

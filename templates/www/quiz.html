@@ -1,0 +1,143 @@
+{% extends 'www/header.html' %}
+{% load staticfiles %}
+
+{% block title %}
+OUR QUIZ
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+
+a:hover{
+	text-decoration: none !important;
+}
+
+.dataTables_length label{
+	float: left;
+}
+.dataTables_info{
+	text-align: left;
+}
+
+</style>
+{% endblock %}
+
+{% block bodystyle %}
+background: url({% static '/img/bg4.jpg' %}) no-repeat fixed;
+{% endblock %}
+
+{% block quiz %}
+active
+{% endblock %}
+
+{% block body %}
+
+	<!-- Section: intro -->
+    <section id="quizintro" class="intro" style="background: rgba(8, 111, 148, 0.2); padding: 20% 0;">
+	
+		<div class="slogan">
+			<h2>Passer un Quiz</h2>
+			<h4>Quiz en ligne gratuit pour e-learning.</h4>
+		</div>
+		<div class="page-scroll">
+			<a href="#quiz" class="btn btn-circle">
+				<i class="fa fa-angle-double-down animated"></i>
+			</a>
+		</div>
+    </section>
+	<!-- /Section: intro -->	
+
+	<!-- Section: quiz -->
+    <section id="quiz" class="home-section text-center bg-gray">
+		
+		<div class="heading-about">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.4s">
+					<div class="section-heading">
+					<h2>Quiz disponibles</h2>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+		<div class="row">
+			<div class="col-lg-2 col-lg-offset-5">
+				<hr class="marginbot-50">
+			</div>
+		</div>
+        <div class="row">
+        <table class="table table-hover" id="quiztable">
+   			<thead>
+   				<tr>
+   					<td>#</td>
+   					<td>QUIZ</td>
+   					<td>PROFESSEUR</td>
+   					<td>NO. QUESTIONS</td>
+   					<td>DATE DE PUBLICATION</td>
+   					<td>ACTIONS</td>
+   				</tr>
+   			</thead>
+   			<tbody>
+        		{% for quiz in all_quizs %}
+   					<tr>
+   						<td>{{ forloop.counter }}</td>
+   						<td>{{ quiz.quiz_subject }}</td>
+   						<td>{{ quiz.quiz_prof.username }}</td>
+   						<td>{{ quiz.question_set.count }}</td>
+   						<td>{{ quiz.pub_date }}</td>
+   						<td>
+   							{% if connected %}
+								<a href="{% url 'www:startquiz' quiz.id %}#quiz" class="btn btn-info">
+							{% else %}
+								<a href="#" data-toggle="modal" data-target="#notConnected" class="btn btn-info">
+							{% endif %}
+								passer
+							</a>
+   						</td>
+   					</tr>
+        		{% endfor %}
+   			</tbody>
+        </table>
+        </div>		
+		</div>
+	</section>
+	<!-- /Section: quiz -->
+	
+
+		<!-- Modal -->
+		<div id="notConnected" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h3>Vous devez vous connecter.</h3>
+		      </div>
+		      <div class="modal-body">
+		      	<tt>Vous ne pouvez passer aucun quiz avant de se connecter.</tt><br>
+		      	<tt>s'il vous plait <a href="#" data-toggle="modal" data-dismiss="modal" data-target="#myModal">cliquez ici</a> pour se connecter ou s'inscrire.</tt>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
+		<!-- /Modal -->
+
+	<script src="{% static 'js/jquery.js' %}"></script>
+	<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+	<script src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
+	<script>
+		$('#quiztable').dataTable();
+	</script>
+
+{% endblock %}

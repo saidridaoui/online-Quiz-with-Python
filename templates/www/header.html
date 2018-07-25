@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	{% load staticfiles %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <!-- Website Icon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.png' %}">
+
+    <title>{% block title %}{% endblock %} | QUIZ UNIVERSE</title>
+
+	<!-- Bootstrap Core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+
+    <!-- Fonts -->
+    <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+	<link href="{% static 'css/animate.css' %}" rel="stylesheet" />
+    <!-- Squad theme CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+	<link href="{% static 'color/default.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/dataTables.bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+	{% block head %}
+	{% endblock %}
+
+</head>
+
+<body id="page-top" data-spy="scroll" data-target=".navbar-custom" style="{% block bodystyle %}{% endblock %}">
+	<!-- Preloader -->
+	<div id="preloader">
+	  <div id="load"></div>
+	</div>
+
+    <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="{% url 'www:index' %}#intro">
+                    <h1>QUIZ UNIVERSE</h1>
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+		      <ul class="nav navbar-nav">
+		      	{% if connected == 'admin' %}
+		      	<li class="dropdown {% block adminhome %}{% endblock %}">
+		          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-home"> Accueil <b class="caret"></b></a>
+		          <ul class="dropdown-menu">
+		        	<li><a href="{% url 'www:indexAdmin' %}#intro">Accueil</a></li>
+		        	<li><a href="{% url 'www:indexAdmin' %}#admin">Admins</a></li>
+					<li><a href="{% url 'www:indexAdmin' %}#professor">Professeurs</a></li>
+					<li><a href="{% url 'www:indexAdmin' %}#user">Etudiants</a></li>
+		          </ul>
+		        </li>
+				<li class="{% block add %}{% endblock %}"><a href="{% url 'www:add' %}#add"><span class="glyphicon glyphicon-plus"></span> Ajouter un acteur</a></li>
+		      	<li class="dropdown">
+		      		<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-ban-circle"></span> Comptes verouillés <span class="badge" style="background: rgba(8, 111, 148, 0.5);">{{ locked.count }}</span> &nbsp;<b class="caret"></b></a>
+					<ul class="dropdown-menu" style="width: 140%;">
+					{% for usr in locked %}
+						<li style="border: 0;">
+							<tt class="col-sm-7">{{ usr.username }} - {{ usr.cin }}</tt>
+							<tt class="col-sm-5"><a href="{% url 'www:unlock' usr.id %}"> déverouiller</a></tt>
+						</li>
+					{% endfor %}
+					{% if not locked %}
+						<li style="border: 0;">
+							<tt class="col-sm-10">aucun compte bolqué</tt>
+						</li>
+					{% endif %}
+					</ul>
+		        </li>
+		      	{% elif connected == 'professor' %}
+		        <li class="{% block profhome %}{% endblock %}"><a href="{% url 'www:indexProf' %}#intro"><span class="glyphicon glyphicon-home"> Accueil</a></li>
+				<li class="{% block myquiz %}{% endblock %}"><a href="{% url 'www:myquizs' %}#quiz"><span class="glyphicon glyphicon-tasks"> Mes quiz</a></li>
+				<li class="{% block addquiz %}{% endblock %}"><a href="{% url 'www:addquiz' %}#add"><span class="glyphicon glyphicon-plus"></span> Ajouter un quiz</a></li>
+		      	{% else %}
+		        <li class="dropdown {% block home %}{% endblock %}">
+		          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-home"> Accueil <b class="caret"></b></a>
+		          <ul class="dropdown-menu">
+		        	<li><a href="{% url 'www:index' %}#intro">Accueil</a></li>
+		        	<li><a href="{% url 'www:index' %}#about">A propos</a></li>
+					<li><a href="{% url 'www:index' %}#service">Services</a></li>
+		          </ul>
+		        </li>
+				<li class="{% block quiz %}{% endblock %}"><a href="{% url 'www:quiz' %}#quizintro"><span class="glyphicon glyphicon-tasks"> Quiz</a></li>
+		      	{% endif %}
+				{% if connected %}
+				<li class="dropdown">
+		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-transform: capitalize;"><span class="glyphicon glyphicon-user"></span> {{ user.username }} <b class="caret"></b></a>
+		          <ul class="dropdown-menu">
+		        	<li><a href="{% url 'www:logout' %}"><span class="glyphicon glyphicon-log-out"></span> Déconnecter</a></li>
+		          </ul>
+		        </li>
+				{% else %}
+				<li><a href="#" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-user"></span> Se connecter / Inscription</a></li>
+				{% endif %}
+		      </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <div id="toppage"></div>
+
+    {% if error_message %}
+    {% endif %}
+
+    {% if not connected %}
+    	<!-- Modal -->
+		<div class="modal fade" id="myModal" role="dialog" style="z-index: 1050;">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<ul class="nav nav-pills">
+							<li class="active"><a data-toggle="tab" href="#login">Se connecter</a></li>
+							<li><a data-toggle="tab" href="#inscription">Inscription</a></li>
+						</ul>
+					</div>
+					<div class="modal-body row" style="padding-left: 60px; padding-right: 60px;">
+
+						<div class="tab-content">
+							<div id="login" class="tab-pane fade in active center-block" style="width: 80%;">
+								<h3 class="section-title">Se connecter</h3>
+								<form id="contact-form" class="form-group form-light mt-20 center-block" style="width: 60%;" role="form" method="post" action="{% url 'www:login' %}">
+								{% csrf_token %}
+									<div class="form-group">
+										<label for="username">Nom d'utilisateur <font color="darkred">*</font></label>
+										<div class="input-group">
+										<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+										<input type="text" name="username" id="username" class="form-control" placeholder="Your username" maxlength="25" required="" autofocus>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="password">Mot de passe <font color="darkred">*</font></label>
+										<div class="input-group">
+										<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+										<input type="password" name="password" id="password" class="form-control" placeholder="Your password" maxlength="16" required="">
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="type">Type <font color="darkred">*</font></label>
+										<select name="type" id="type" class="form-control" required="">
+											<option value="user">Etudiant</option>
+											<option value="professor">Professeur</option>
+											<option value="admin">Admin</option>
+										</select>
+									</div>
+									<button type="submit" class="btn btn-two">se connecter</button><p><br/></p>
+								</form>
+							</div>
+							<div id="inscription" class="tab-pane fade center-block" style="width: 80%;">
+								<h3 class="section-title">Inscription</h3>
+								<form id="contact-form" class="form-group form-light mt-20" role="form" method="post" action="{% url 'www:register' %}#register">
+								{% csrf_token %}
+									<div class="form-group">
+										<label for="username">Nom d'utilisateur <font color="darkred">*</font></label>
+										<input type="text" name="username" id="username" class="form-control" placeholder="Your username" maxlength="25" required="">
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="password">Mot de passe <font color="darkred">*</font></label>
+												<input type="password" name="password" id="password" class="form-control" placeholder="Your password" maxlength="16" required="">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="cpassword">Confirmation de mot de passe <font color="darkred">*</font></label>
+												<input type="password" name="confirm_password" id="cpassword" class="form-control" placeholder="Confirm your password" maxlength="16" required="">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="email">Email <font color="darkred">*</font></label>
+										<input type="email" name="email" id="email" class="form-control" placeholder="Email address" maxlength="500" required="">
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="type">Type <font color="darkred">*</font></label>
+												<select name="type" id="type" class="form-control" required="">
+													<option value="user">Etudiant</option>
+													<option value="professor">Professeur</option>
+													<option value="admin">Admin</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="cin">C.I.N <font color="darkred">*</font></label>
+												<input type="text" name="cin" id="cin" class="form-control" placeholder="Your C.I.N" maxlength="10" required="">
+											</div>
+										</div>
+									</div>
+									<button type="submit" class="btn btn-two">s'inscrire</button><p><br/></p>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+
+{% block body %}
+{% endblock %}
+
+	<footer style="background: rgba(8, 111, 148, 0.5);">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 col-lg-12">
+					<div class="wow shake" data-wow-delay="0.4s">
+					<div class="page-scroll marginbot-30">
+						<a href="#toppage" id="totop" class="btn btn-circle">
+							<i class="fa fa-angle-double-up animated"></i>
+						</a>
+					</div>
+					</div>
+					<p>&copy;Copyright 2017 - Quiz Universe. All rights reserved.</p>
+				</div>
+			</div>	
+		</div>
+	</footer>
+
+    <!-- Core JavaScript Files -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.easing.min.js' %}"></script>	
+	<script src="{% static 'js/jquery.scrollTo.js' %}"></script>
+	<script src="{% static 'js/wow.min.js' %}"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="{% static 'js/custom.js' %}"></script>
+
+</body>
+
+</html>

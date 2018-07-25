@@ -1,0 +1,199 @@
+{% extends 'www/header.html' %}
+{% load staticfiles %}	
+
+{% block title %}
+WELCOME
+{% endblock %}
+
+
+{% block head %}
+<style type="text/css">
+
+a:hover{
+	text-decoration: none !important;
+}
+
+.dataTables_length label{
+	float: left;
+}
+.dataTables_info{
+	text-align: left;
+}
+
+
+</style>
+{% endblock %}
+
+{% block bodystyle %}
+background: url({% static '/img/bg2.jpg' %}) no-repeat fixed; background-size: 100%;
+{% endblock %}
+
+{% block profhome %}
+active
+{% endblock %}
+
+{% block body %}
+
+
+	<!-- Section: intro -->
+    <section id="intro" class="intro" style="background: rgba(8, 111, 148, 0.5);">
+	
+		<div class="slogan">
+			<h2>Espace Professeur</h2>
+			<h4>Vous pouver ajouter, modifier ou supprimer les quiz, les questions et leurs choix.</h4>
+		</div>
+		<div class="page-scroll">
+			<a href="#quiz" class="btn btn-circle">
+				<i class="fa fa-angle-double-down animated"></i>
+			</a>
+		</div>
+    </section>
+	<!-- /Section: intro -->
+
+	<!-- Section: about -->
+    <section id="about" class="home-section text-center bg-white">
+		<div class="heading-about">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.4s">
+					<div class="section-heading">
+					<h2>A propos</h2>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+
+		<div class="row">
+			<div class="col-lg-2 col-lg-offset-5">
+				<hr class="marginbot-50">
+			</div>
+		</div>
+        <div class="row">
+			<div class="col-xs-6 col-sm-3 col-md-3">
+				<div class="wow bounceInUp" data-wow-delay="0.8s">
+                <div class="team boxed-grey">
+                    <div class="inner">
+						<h5>Administrateur</h5>
+                        <p class="subtitle">Gérer les utilisateurs</p>
+                        <div class="avatar" align="center"><img src="{% static 'img/3.png' %}" alt="" class="img-responsive img-circle" /></div>
+
+                    </div>
+                </div>
+				</div>
+            </div>
+            <div class="col-xs-6 col-sm-3 col-md-3">
+				<div class="wow bounceInUp" data-wow-delay="0.2s">
+                <div class="team boxed-grey">
+                    <div class="inner">
+						<h5>Professeur</h5>
+                        <p class="subtitle">Gérer les quiz</p>
+                        <div class="avatar" align="center"><img src="{% static 'img/1.png' %}" alt="" class="img-responsive img-circle" /></div>
+                    </div>
+                </div>
+				</div>
+            </div>
+			<div class="col-xs-6 col-sm-3 col-md-3">
+				<div class="wow bounceInUp" data-wow-delay="0.5s">
+                <div class="team boxed-grey">
+                    <div class="inner">
+						<h5>Etudiant</h5>
+                        <p class="subtitle">Passer des quiz</p>
+                        <div class="avatar" align="center"><img src="{% static 'img/2.png' %}" alt="" class="img-responsive img-circle" /></div>
+
+                    </div>
+                </div>
+				</div>
+            </div>
+			<div class="col-xs-6 col-sm-3 col-md-3">
+				<div class="wow bounceInUp" data-wow-delay="1s">
+                <div class="team boxed-grey">
+                    <div class="inner">
+						<h5>Visiteur</h5>
+                        <p class="subtitle">Voir les quiz disponibles</p>
+                        <div class="avatar" align="center"><img src="{% static 'img/4.png' %}" alt="" class="img-responsive img-circle" /></div>
+					</div>
+                </div>
+				</div>
+            </div>
+        </div>		
+		</div>
+	</section>
+	<!-- /Section: about -->
+	
+
+	<!-- Section: quiz -->
+    <section id="quiz" class="home-section text-center bg-gray">
+		
+		<div class="heading-about">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.4s">
+					<div class="section-heading">
+					<h2>Nos Quiz</h2>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+		<div class="row">
+			<div class="col-lg-2 col-lg-offset-5">
+				<hr class="marginbot-50">
+			</div>
+		</div>
+        <div class="row">
+        <table class="table table-hover" id="quiztable">
+   			<thead>
+   				<tr>
+   					<td>#</td>
+   					<td>QUIZ</td>
+   					<td>PROFESSEUR</td>
+   					<td>NO. QUESTIONS</td>
+   					<td>DATE DE PUBLICATION</td>
+   					<td>ACTIONS</td>
+   				</tr>
+   			</thead>
+   			<tbody>
+        		{% for quiz in all_quizs %}
+   					<tr>
+   						<td>{{ forloop.counter }}</td>
+   						<td>{{ quiz.quiz_subject }}</td>
+   						<td>{{ quiz.quiz_prof.username }}</td>
+   						<td>{{ quiz.question_set.count }}</td>
+   						<td>{{ quiz.pub_date }}</td>
+   						<td>
+   							{% if connected %}
+								<a href="{% url 'www:startquiz' quiz.id %}#quiz" class="btn btn-info">
+							{% else %}
+								<a href="#" data-toggle="modal" data-target="#notConnected" class="btn btn-info">
+							{% endif %}
+								passer
+							</a>
+   						</td>
+   					</tr>
+        		{% endfor %}
+   			</tbody>
+        </table>
+        </div>
+		</div>
+	</section>
+	<!-- /Section: quiz -->
+
+	<script src="{% static 'js/jquery.js' %}"></script>
+	<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+	<script src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
+	<script>
+		$('#quiztable').dataTable();
+	</script>
+
+{% endblock %}

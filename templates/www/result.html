@@ -1,0 +1,136 @@
+{% extends 'www/header.html' %}
+{% load staticfiles %}	
+
+{% block title %}
+QUIZ RESULT
+{% endblock %}
+
+{% block bodystyle %}
+background: url({% static '/img/bg9.jpg' %}) no-repeat fixed; background-size: 100%;
+{% endblock %}
+
+{% block quiz %}
+active
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+
+
+	<!-- Section: intro -->
+    <section id="intro" class="intro" style="background: rgba(8, 111, 148, 0.5);">
+    	<div class="slogan">
+			<h2>RESULTAT DU QUIZ</h2>
+			<h4>Quiz en ligne gratuit pour e-learning.</h4>
+		</div>
+		<div class="page-scroll">
+			<a href="#quiz" class="btn btn-circle">
+				<i class="fa fa-angle-double-down animated"></i>
+			</a>
+		</div>
+    </section>
+	<!-- /Section: intro -->
+
+	<!-- Section: quiz -->
+    <section id="quiz" class="home-section bg-white">
+		<div class="heading-about text-center">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.2s">
+					<div class="section-heading">
+					<h2>Quiz - {{ quiz.quiz_subject }} -</h2>
+					<h3>Score: {{ true_qst }} / {{ quiz.question_set.all.count }}</h3>
+					<i class="fa fa-2x fa-angle-down"></i>
+
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+
+		<div class="row">
+			<div class="col-lg-2 col-lg-offset-5">
+				<hr class="marginbot-50">
+			</div>
+		</div>
+        <div class="row">
+<h3>Correction du quiz :</h3>
+<br>
+{% if mark <= 25 %}
+<div class="progress wow bounceInRight" data-wow-delay="0.4s">
+  <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{ mark }}"
+  aria-valuemin="0" aria-valuemax="100" style="width: {{  mark }}%">
+    {{ mark }}% Complete (noob)
+  </div>
+</div>
+{% elif mark <= 50 %}
+<div class="progress wow bounceInRight" data-wow-delay="0.4s">
+  <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{{ mark }}"
+  aria-valuemin="0" aria-valuemax="100" style="width: {{  mark }}%">
+    {{ mark }}% Complete (meduim)
+  </div>
+</div>
+{% elif mark <= 80 %}
+<div class="progress wow bounceInRight" data-wow-delay="0.4s">
+  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ mark }}"
+  aria-valuemin="0" aria-valuemax="100" style="width: {{  mark }}%">
+    {{ mark }}% Complete (congratulation)
+  </div>
+</div>
+{% else %}
+<div class="progress wow bounceInRight" data-wow-delay="0.4s">
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ mark }}"
+  aria-valuemin="0" aria-valuemax="100" style="width: {{  mark }}%">
+    {{ mark }}% Complete (Excelent)
+  </div>
+</div>
+{% endif %}
+
+			<!-- Correction -->
+			<table id="correction" class="table table-hover wow bounceInUp" data-wow-delay="0.2s">
+				<thead>
+					<tr id="none" class="wow bounceInUp" data-wow-delay="0.3s">
+						<th>#</th>
+						<th>Question</th>
+						<th>réponse juste</th>
+						<th>votre réponse</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for ar in archive %}
+					<tr id="tr" class="wow bounceInLeft" data-wow-delay="0.3s">
+						<td>{{ forloop.counter }}</td>
+						<td>{{ ar.choice.question.question_text }}</td>
+						<td>
+							{% for choice in ar.choice.question.choice_set.all %}
+								{% if choice.is_true %}
+									{{ choice.choice_text }}<br>
+								{% endif %}
+							{% endfor %}
+						</td>
+						<td>
+							{% if ar.is_true %}
+							<span class="glyphicon glyphicon-ok-sign" style="color: green;"></span>
+							{% else %}
+							<span class="glyphicon glyphicon-remove-sign" style="color: red;"></span>
+							{% endif %}
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<br>
+			<p><a href="{% url 'www:quizqst' quiz.id question.id %}#quiz">Passer une autre fois !</a></p>
+			<p>Pour passer un autre quiz <a href="{% url 'www:quiz' %}#quiz">cliquez ici</a></p>
+
+		</div>
+	</section>
+	<!-- /Section: quiz -->
+
+{% endblock %}
